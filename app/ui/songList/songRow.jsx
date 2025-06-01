@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { secondsToMinutes } from "../../lib/utils";
 import { cn } from "../../lib/utils";
 
 export function SongRow(props) {
@@ -144,7 +145,7 @@ export function SongRow(props) {
             </button>
           )}
           <span className="text-spotify-gray cursor-default">
-            {props.duration}
+            {secondsToMinutes(props.duration)}
           </span>
           {/*options button*/}
           <button className="text-white cursor-pointer invisible group-hover:visible group-focus:visible">

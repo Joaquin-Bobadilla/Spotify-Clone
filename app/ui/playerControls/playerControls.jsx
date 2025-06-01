@@ -1,4 +1,5 @@
 import { demonDays } from "../../lib/placeholder-data";
+import Image from "next/image";
 
 export function PlayerControls() {
   const song = demonDays.songList[2];
@@ -9,7 +10,7 @@ export function PlayerControls() {
       <div className="flex gap-4 items-center h-full">
         <img
           className="h-full aspect-square rounded-sm"
-          src="https://upload.wikimedia.org/wikipedia/en/thumb/d/df/Gorillaz_Demon_Days.PNG/250px-Gorillaz_Demon_Days.PNG"
+          src="/playerControls/Gorillaz_Demon_Days.png"
           alt="album cover"
         />
         <div className="flex flex-col gap-0">
@@ -43,7 +44,7 @@ export function PlayerControls() {
       </div>
 
       {/*playback controls*/}
-      <div className="flex flex-col min-w-70 justify-between items-center w-1/4 self-center h-full">
+      <div className="flex flex-col min-w-70 justify-between items-center w-3/8 h-full">
         <div className="flex gap-6 items-center">
           <svg
             className="size-4 fill-spotify-gray spotify-btn"
@@ -62,7 +63,7 @@ export function PlayerControls() {
           </svg>
           <button className="size-8 rounded-full bg-white flex items-center mx-1 spotify-btn">
             <svg
-              className="size-4 fill-black m-auto"
+              className="size-5 fill-black m-auto"
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
             >

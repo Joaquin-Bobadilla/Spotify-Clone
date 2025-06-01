@@ -7,7 +7,7 @@
 
 @layer components {
   .spotify-btn {
-    @apply cursor-pointer hover:scale-104 hover:brightness-130 active:scale-95 active:brightness-75;
+    @apply cursor-pointer hover:scale-104 hover:brightness-125 active:scale-97 active:brightness-85;
   }
 }
 

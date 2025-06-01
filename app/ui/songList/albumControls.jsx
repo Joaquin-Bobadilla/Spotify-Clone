@@ -8,7 +8,7 @@ export function AlbumControls(props) {
   const [isShuffle, setShuffle] = useState(false);
 
   return (
-    <div className="w-full flex gap-5 my-5 items-center">
+    <div className="w-full flex gap-5 mb-5 items-center">
       {/*play button*/}
       <button
         className="cursor-pointer hover:scale-103 hover:brightness-110 size-[56px] bg-spotify-green rounded-full flex items-center justify-center"
