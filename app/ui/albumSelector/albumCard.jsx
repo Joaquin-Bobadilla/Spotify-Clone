@@ -1,15 +1,41 @@
+"use client";
+
 import Link from "next/link";
+import { songStore } from "@/app/store";
+import { cn } from "@/app/lib/utils";
 
 export function AlbumCard(props) {
   const { id, image, name, artist } = props.album;
+  const currentSong = songStore((state) => state.currentSong);
+  const isPlaying = songStore((state) => state.isPlaying);
+  const setPlaying = songStore((state) => state.setPlaying);
+  const setCurrentSong = songStore((state) => state.setCurrentSong);
 
   return (
-    <Link
-      href={`/album/${id}`}
-      className="group flex flex-col p-3 rounded-md cursor-pointer hover:bg-[#1c1c1c] grow w-32 min-w-32"
-    >
-      <div className="relative">
-        <button className="z-2 cursor-pointer spotify-btn size-12 rounded-full bg-spotify-green opacity-0 group-hover:opacity-100 group-hover:-translate-y-2 duration-350 ease-in-out hover:ease-linear hover:duration-0 absolute bottom-0 right-2">
+    <div className="relative group flex flex-col p-3 rounded-lg cursor-pointer hover:backdrop-brightness-170 grow w-32 min-w-32">
+      {currentSong && currentSong.album === id && isPlaying ? (
+        <button
+          className="z-2 cursor-pointer spotify-btn size-12 rounded-full bg-spotify-green duration-350 ease-in-out hover:ease-linear hover:duration-0 absolute right-5 bottom-16 opacity-100 -translate-y-2"
+          onClick={() => setPlaying(false)}
+        >
+          <svg
+            className="size-5 fill-black m-auto"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 16 16"
+          >
+            <path d="M2.7 1a.7.7 0 0 0-.7.7v12.6a.7.7 0 0 0 .7.7h2.6a.7.7 0 0 0 .7-.7V1.7a.7.7 0 0 0-.7-.7H2.7zm8 0a.7.7 0 0 0-.7.7v12.6a.7.7 0 0 0 .7.7h2.6a.7.7 0 0 0 .7-.7V1.7a.7.7 0 0 0-.7-.7h-2.6z"></path>
+          </svg>
+        </button>
+      ) : (
+        <button
+          className="z-2 cursor-pointer spotify-btn size-12 rounded-full bg-spotify-green duration-350 ease-in-out hover:ease-linear hover:duration-0 absolute right-5 bottom-16 opacity-0 group-hover:opacity-100 group-hover:-translate-y-2"
+          onClick={() => {
+            if (!currentSong || currentSong.album !== props.album.id) {
+              setCurrentSong(props.album.songList[0]);
+            }
+            setPlaying(true);
+          }}
+        >
           <svg
             className="size-6 fill-black m-auto"
             xmlns="http://www.w3.org/2000/svg"
@@ -18,15 +44,27 @@ export function AlbumCard(props) {
             <path d="m7.05 3.606 13.49 7.788a.7.7 0 0 1 0 1.212L7.05 20.394A.7.7 0 0 1 6 19.788V4.212a.7.7 0 0 1 1.05-.606z"></path>
           </svg>
         </button>
-        <img className="rounded-md grow aspect-square" src={image} alt={name} />
-      </div>
+      )}
 
-      <span className="text-white text-md break-all line-clamp-1 mt-1">
-        {name}
-      </span>
-      <span className="text-spotify-gray text-sm break-all line-clamp-1">
-        {"Álbum • " + artist}
-      </span>
-    </Link>
+      <Link href={`/album/${id}`}>
+        <img className="rounded-md grow aspect-square" src={image} alt={name} />
+
+        <div className="h-12">
+          <span
+            className={cn(
+              "text-md break-all line-clamp-1 mt-1",
+              currentSong && currentSong.album === id
+                ? "text-spotify-green"
+                : "text-white"
+            )}
+          >
+            {name}
+          </span>
+          <span className="text-spotify-gray text-sm break-all line-clamp-1">
+            {"Álbum • " + artist}
+          </span>
+        </div>
+      </Link>
+    </div>
   );
 }

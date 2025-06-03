@@ -2,19 +2,25 @@
 
 import { useState } from "react";
 import { cn } from "../../lib/utils";
+import { songStore } from "../../store";
 
 export function AlbumControls(props) {
-  const [isLiked, setLiked] = useState(props.isLiked);
+  const [isLiked, setLiked] = useState(props.album.isLiked);
   const [isShuffle, setShuffle] = useState(false);
+  const isPlaying = songStore((state) => state.isPlaying);
+  const currentSong = songStore((state) => state.currentSong);
+  const setPlaying = songStore((state) => state.setPlaying);
+  const setCurrentSong = songStore((state) => state.setCurrentSong);
 
   return (
     <div className="w-full flex gap-5 mb-5 items-center">
       {/*play button*/}
-      <button
-        className="cursor-pointer hover:scale-103 hover:brightness-110 size-[56px] bg-spotify-green rounded-full flex items-center justify-center"
-        onClick={() => props.setPlaying(!props.isPlaying)}
-      >
-        {props.isPlaying ? (
+
+      {currentSong && currentSong.album === props.album.id && isPlaying ? (
+        <button
+          className="cursor-pointer hover:scale-103 hover:brightness-110 size-[56px] bg-spotify-green rounded-full flex items-center justify-center"
+          onClick={() => setPlaying(false)}
+        >
           <svg
             className="size-[20px] fill-black"
             xmlns="http://www.w3.org/2000/svg"
@@ -22,7 +28,17 @@ export function AlbumControls(props) {
           >
             <path d="M2.7 1a.7.7 0 0 0-.7.7v12.6a.7.7 0 0 0 .7.7h2.6a.7.7 0 0 0 .7-.7V1.7a.7.7 0 0 0-.7-.7H2.7zm8 0a.7.7 0 0 0-.7.7v12.6a.7.7 0 0 0 .7.7h2.6a.7.7 0 0 0 .7-.7V1.7a.7.7 0 0 0-.7-.7h-2.6z"></path>
           </svg>
-        ) : (
+        </button>
+      ) : (
+        <button
+          className="cursor-pointer hover:scale-103 hover:brightness-110 size-[56px] bg-spotify-green rounded-full flex items-center justify-center"
+          onClick={() => {
+            if (!currentSong || currentSong.album !== props.album.id) {
+              setCurrentSong(props.album.songList[0]);
+            }
+            setPlaying(true);
+          }}
+        >
           <svg
             className="size-[20px] fill-black"
             xmlns="http://www.w3.org/2000/svg"
@@ -30,8 +46,9 @@ export function AlbumControls(props) {
           >
             <path d="M3 1.713a.7.7 0 0 1 1.05-.607l10.89 6.288a.7.7 0 0 1 0 1.212L4.05 14.894A.7.7 0 0 1 3 14.288V1.713z"></path>
           </svg>
-        )}
-      </button>
+        </button>
+      )}
+
       {/*shuffle button*/}
       <button
         className="cursor-pointer hover:scale-103 hover:brightness-150"

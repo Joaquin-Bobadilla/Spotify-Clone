@@ -6,8 +6,6 @@ import { AlbumHeader } from "./albumHeader";
 import { useState } from "react";
 
 export function AlbumModule(props) {
-  const [isPlaying, setPlaying] = useState(false);
-
   return (
     <section className="h-full overflow-auto rounded-lg">
       <AlbumHeader album={props.album} />
@@ -17,16 +15,8 @@ export function AlbumModule(props) {
           backgroundImage: `linear-gradient(to bottom, ${props.album.colorTo}BF, #121212 25%)`,
         }}
       >
-        <AlbumControls
-          isPlaying={isPlaying}
-          setPlaying={setPlaying}
-          isLiked={props.album.isLiked}
-        />
-        <AlbumTable
-          songList={props.album.songList}
-          setPlaying={setPlaying}
-          isPlaying={isPlaying}
-        />
+        <AlbumControls album={props.album} />
+        <AlbumTable songList={props.album.songList} />
       </div>
     </section>
   );

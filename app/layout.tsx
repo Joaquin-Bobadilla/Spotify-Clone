@@ -16,7 +16,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <div className="flex flex-row gap-2 size-full overflow-auto px-2">
           <AlbumSelector />
           <div className="rounded-lg grow">{children}</div>
-          <div className="bg-[#121212] min-w-70 max-w-105 resize-x overflow-auto"></div>
+          <div className="bg-spotify-background min-w-70 max-w-105 resize-x overflow-auto"></div>
         </div>
 
         <footer className="h-22 p-4">

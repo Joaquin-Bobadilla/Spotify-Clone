@@ -3,9 +3,15 @@
 import { useState } from "react";
 import { secondsToMinutes } from "../../lib/utils";
 import { cn } from "../../lib/utils";
+import { songStore } from "@/app/store";
 
 export function SongRow(props) {
-  const [isLiked, setLiked] = useState(props.isLiked);
+  const [isLiked, setLiked] = useState(props.song.isLiked);
+  const isPlaying = songStore((state) => state.isPlaying);
+  const togglePlaying = songStore((state) => state.togglePlaying);
+  const currentSong = songStore((state) => state.currentSong);
+  const setCurrentSong = songStore((state) => state.setCurrentSong);
+  const setPlaying = songStore((state) => state.setPlaying);
 
   return (
     <tr
@@ -14,13 +20,13 @@ export function SongRow(props) {
     >
       {/*id, play button cell*/}
       <td className="w-12 text-center text-spotify-gray rounded-s-sm">
-        {props.songId === props.playingId && props.isPlaying ? (
+        {currentSong && props.song.id === currentSong.id && isPlaying ? (
           /*pause button*/
           <button
             className="m-auto hidden group-hover:block group-focus:block"
             onClick={() => {
               //props.playSong(0);
-              props.setPlaying(false);
+              setPlaying(false);
             }}
           >
             <svg
@@ -39,8 +45,8 @@ export function SongRow(props) {
           <button
             className="m-auto hidden group-hover:block group-focus:block"
             onClick={() => {
-              props.playSong(props.songId);
-              props.setPlaying(true);
+              setCurrentSong(props.song);
+              setPlaying(true);
             }}
           >
             <svg
@@ -56,7 +62,7 @@ export function SongRow(props) {
         <img
           className={cn(
             "group-hover:hidden group-focus:hidden m-auto size-[14px]",
-            props.songId === props.playingId && props.isPlaying
+            currentSong && props.song.id === currentSong.id && isPlaying
               ? "block"
               : "hidden"
           )}
@@ -66,15 +72,15 @@ export function SongRow(props) {
         <span
           className={cn(
             "group-hover:hidden group-focus:hidden text-[1.07em]",
-            props.songId === props.playingId && props.isPlaying
+            currentSong && props.song.id === currentSong.id && isPlaying
               ? "hidden"
               : "block",
-            props.songId === props.playingId && !props.isPlaying
+            currentSong && props.song.id === currentSong.id && !isPlaying
               ? "text-spotify-green"
               : "text-spotify-gray"
           )}
         >
-          {props.songId}
+          {props.ord}
         </span>
       </td>
       {/*title, artists cell*/}
@@ -83,16 +89,16 @@ export function SongRow(props) {
           <span
             className={cn(
               "leading-5 cursor-default font-medium break-all line-clamp-1",
-              props.songId === props.playingId
+              currentSong && props.song.id === currentSong.id
                 ? "text-spotify-green"
                 : "text-white"
             )}
           >
-            {props.title}
+            {props.song.title}
           </span>
           <span className="leading-5 text-sm text-spotify-gray group-hover:text-white group-focus:text-white break-all line-clamp-1">
-            {props.artists.map((artist, index) => {
-              const isLast = index !== props.artists.length - 1;
+            {props.song.artists.map((artist, index) => {
+              const isLast = index !== props.song.artists.length - 1;
               return (
                 <span key={index}>
                   <a className="hover:underline" href="">
@@ -108,7 +114,7 @@ export function SongRow(props) {
       {/*streams cell*/}
       <td className="px-3 align-middle hidden sm:table-cell cursor-default text-spotify-gray group-hover:text-white group-focus:text-white">
         <span className="block text-right w-[13ch]">
-          {props.streams.toLocaleString("es-AR")}
+          {props.song.streams.toLocaleString("es-AR")}
         </span>
       </td>
       {/*like, duration, options cell*/}
@@ -144,8 +150,8 @@ export function SongRow(props) {
               </svg>
             </button>
           )}
-          <span className="text-spotify-gray cursor-default">
-            {secondsToMinutes(props.duration)}
+          <span className="text-spotify-gray cursor-default w-10 text-right">
+            {secondsToMinutes(props.song.duration)}
           </span>
           {/*options button*/}
           <button className="text-white cursor-pointer invisible group-hover:visible group-focus:visible">

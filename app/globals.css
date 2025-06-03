@@ -3,6 +3,7 @@
 @theme {
   --color-spotify-gray: #b3b3b3;
   --color-spotify-green: #1ed760;
+  --color-spotify-background: #121212;
 }
 
 @layer components {

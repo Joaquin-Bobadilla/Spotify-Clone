@@ -1,15 +1,8 @@
 "use client";
 
 import { SongRow } from "./songRow";
-import { useState } from "react";
 
 export function AlbumTable(props) {
-  const [playingId, setPlayingId] = useState(0);
-
-  const playSong = (songId) => {
-    setPlayingId(songId);
-  };
-
   return (
     <table className="w-full">
       <thead>
@@ -34,25 +27,9 @@ export function AlbumTable(props) {
       </thead>
 
       <tbody>
-        {props.songList.map(
-          ({ songId, title, artists, streams, duration, isLiked }) => {
-            return (
-              <SongRow
-                playSong={playSong}
-                setPlaying={props.setPlaying}
-                isPlaying={props.isPlaying}
-                playingId={playingId}
-                key={songId}
-                songId={songId}
-                title={title}
-                artists={artists}
-                streams={streams}
-                duration={duration}
-                isLiked={isLiked}
-              />
-            );
-          }
-        )}
+        {props.songList.map((song, index) => {
+          return <SongRow key={song.id} song={song} ord={index + 1} />;
+        })}
       </tbody>
     </table>
   );
