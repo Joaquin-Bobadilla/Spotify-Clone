@@ -1,17 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { secondsToMinutes } from "../../lib/utils";
-import { cn } from "../../lib/utils";
-import { songStore } from "@/app/store";
+import { secondsToMinutes, cn } from "@/lib/utils";
+import { useSongStore } from "@/app/store";
+import type { TSong } from "@/lib/placeholder-data";
 
-export function SongRow(props) {
+export function SongRow(props: { song: TSong; ord: number }) {
   const [isLiked, setLiked] = useState(props.song.isLiked);
-  const isPlaying = songStore((state) => state.isPlaying);
-  const togglePlaying = songStore((state) => state.togglePlaying);
-  const currentSong = songStore((state) => state.currentSong);
-  const setCurrentSong = songStore((state) => state.setCurrentSong);
-  const setPlaying = songStore((state) => state.setPlaying);
+  const { currentSong, isPlaying, setIsPlaying, setCurrentSong } =
+    useSongStore();
 
   return (
     <tr
@@ -25,12 +22,11 @@ export function SongRow(props) {
           <button
             className="m-auto hidden group-hover:block group-focus:block"
             onClick={() => {
-              //props.playSong(0);
-              setPlaying(false);
+              setIsPlaying(false);
             }}
           >
             <svg
-              className="size-[18px] fill-white"
+              className="size-4 fill-white"
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
             >
@@ -46,11 +42,11 @@ export function SongRow(props) {
             className="m-auto hidden group-hover:block group-focus:block"
             onClick={() => {
               setCurrentSong(props.song);
-              setPlaying(true);
+              setIsPlaying(true);
             }}
           >
             <svg
-              className="size-[26px] fill-white"
+              className="size-6 fill-white"
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 -960 960 960"
             >
@@ -61,7 +57,7 @@ export function SongRow(props) {
         {/*sound wave icon*/}
         <img
           className={cn(
-            "group-hover:hidden group-focus:hidden m-auto size-[14px]",
+            "group-hover:hidden group-focus:hidden m-auto size-3",
             currentSong && props.song.id === currentSong.id && isPlaying
               ? "block"
               : "hidden"
@@ -71,7 +67,7 @@ export function SongRow(props) {
         {/*song id*/}
         <span
           className={cn(
-            "group-hover:hidden group-focus:hidden text-[1.07em]",
+            "group-hover:hidden group-focus:hidden",
             currentSong && props.song.id === currentSong.id && isPlaying
               ? "hidden"
               : "block",
@@ -123,7 +119,7 @@ export function SongRow(props) {
           {isLiked ? (
             /*liked button*/
             <button
-              className="mr-3 sm:mr-6 cursor-pointer hover:scale-[1.06]"
+              className="mr-3 sm:mr-6 cursor-pointer hover:scale-106"
               onClick={() => setLiked(!isLiked)}
             >
               <svg
@@ -137,7 +133,7 @@ export function SongRow(props) {
           ) : (
             /*add button*/
             <button
-              className="mr-3 sm:mr-6 cursor-pointer hidden group-hover:block group-focus:block hover:scale-[1.06] hover:brightness-[2]"
+              className="mr-3 sm:mr-6 cursor-pointer hidden group-hover:block group-focus:block hover:scale-106 hover:brightness-200"
               onClick={() => setLiked(!isLiked)}
             >
               <svg

@@ -1,4 +1,28 @@
-const demonDays = {
+export type TSong = {
+  id: string;
+  album: string;
+  title: string;
+  artists: string[];
+  streams: number;
+  duration: number;
+  image: string;
+  isLiked: boolean;
+};
+
+export type TAlbum = {
+  id: string;
+  name: string;
+  artist: string;
+  year: number;
+  duration: number;
+  image: string;
+  colorFrom: string;
+  colorTo: string;
+  isLiked: boolean;
+  songList: TSong[];
+};
+
+const demonDays: TAlbum = {
   id: "001",
   name: "Demon Days",
   artist: "Gorillaz",
@@ -162,7 +186,7 @@ const demonDays = {
   ],
 };
 
-const inRainbows = {
+const inRainbows: TAlbum = {
   id: "002",
   name: "In Rainbows",
   artist: "Radiohead",
@@ -276,7 +300,7 @@ const inRainbows = {
   ],
 };
 
-const thriller = {
+const thriller: TAlbum = {
   id: "003",
   name: "Thriller",
   artist: "Michael Jackson",
@@ -380,7 +404,7 @@ const thriller = {
   ],
 };
 
-const theMiseducationOfLaurynHill = {
+const theMiseducationOfLaurynHill: TAlbum = {
   id: "004",
   name: "The Miseducation of Lauryn Hill",
   artist: "Ms. Lauryn Hill",
@@ -554,7 +578,7 @@ const theMiseducationOfLaurynHill = {
   ],
 };
 
-const nevermind = {
+const nevermind: TAlbum = {
   id: "005",
   name: "Nevermind",
   artist: "Nirvana",
@@ -688,7 +712,7 @@ const nevermind = {
   ],
 };
 
-const toPimpAButterfly = {
+const toPimpAButterfly: TAlbum = {
   id: "006",
   name: "To Pimp a Butterfly",
   artist: "Kendrick Lamar",
@@ -870,6 +894,7 @@ const likedAlbums = [
   toPimpAButterfly,
   nevermind,
 ];
+
 export {
   likedAlbums,
   demonDays,

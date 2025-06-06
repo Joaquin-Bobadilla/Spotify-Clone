@@ -1,11 +1,23 @@
-import { AlbumModule } from "../../ui/songList/albumModule";
-import "../../globals.css";
-import { likedAlbums } from "../../lib/placeholder-data";
+import { TAlbum, likedAlbums } from "@/lib/placeholder-data";
+import { AlbumHeader, AlbumControls, AlbumTable } from "@/ui/songList/album";
 
-export default async function Page(props: { params: Promise<{ id: String }> }) {
+export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
-  const id = params.id;
-  const album = likedAlbums.find((album) => album.id === params.id);
+  const album = likedAlbums.find((album) => album.id === params.id) as TAlbum;
 
-  return <AlbumModule album={album} />;
+  return (
+    <section className="h-full overflow-auto rounded-lg">
+      <AlbumHeader album={album} />
+
+      <div
+        className="p-6"
+        style={{
+          backgroundImage: `linear-gradient(to bottom, ${album.colorTo}BF, #121212 25%)`,
+        }}
+      >
+        <AlbumControls album={album} />
+        <AlbumTable songList={album.songList} />
+      </div>
+    </section>
+  );
 }

@@ -1,22 +1,23 @@
 "use client";
 
 import Link from "next/link";
-import { songStore } from "@/app/store";
-import { cn } from "@/app/lib/utils";
+import { useSongStore } from "@/app/store";
+import { cn } from "@/lib/utils";
+import type { TAlbum } from "@/lib/placeholder-data";
 
-export function AlbumCard(props) {
+export function AlbumCard(props: { album: TAlbum }) {
   const { id, image, name, artist } = props.album;
-  const currentSong = songStore((state) => state.currentSong);
-  const isPlaying = songStore((state) => state.isPlaying);
-  const setPlaying = songStore((state) => state.setPlaying);
-  const setCurrentSong = songStore((state) => state.setCurrentSong);
+  const { currentSong, isPlaying, setIsPlaying, setCurrentSong } =
+    useSongStore();
 
   return (
     <div className="relative group flex flex-col p-3 rounded-lg cursor-pointer hover:backdrop-brightness-170 grow w-32 min-w-32">
+      {/* Play/Pause */}
       {currentSong && currentSong.album === id && isPlaying ? (
+        //Pause
         <button
           className="z-2 cursor-pointer spotify-btn size-12 rounded-full bg-spotify-green duration-350 ease-in-out hover:ease-linear hover:duration-0 absolute right-5 bottom-16 opacity-100 -translate-y-2"
-          onClick={() => setPlaying(false)}
+          onClick={() => setIsPlaying(false)}
         >
           <svg
             className="size-5 fill-black m-auto"
@@ -27,13 +28,14 @@ export function AlbumCard(props) {
           </svg>
         </button>
       ) : (
+        //Play
         <button
           className="z-2 cursor-pointer spotify-btn size-12 rounded-full bg-spotify-green duration-350 ease-in-out hover:ease-linear hover:duration-0 absolute right-5 bottom-16 opacity-0 group-hover:opacity-100 group-hover:-translate-y-2"
           onClick={() => {
             if (!currentSong || currentSong.album !== props.album.id) {
               setCurrentSong(props.album.songList[0]);
             }
-            setPlaying(true);
+            setIsPlaying(true);
           }}
         >
           <svg
@@ -46,6 +48,7 @@ export function AlbumCard(props) {
         </button>
       )}
 
+      {/* Album Info */}
       <Link href={`/album/${id}`}>
         <img className="rounded-md grow aspect-square" src={image} alt={name} />
 
@@ -61,7 +64,7 @@ export function AlbumCard(props) {
             {name}
           </span>
           <span className="text-spotify-gray text-sm break-all line-clamp-1">
-            {"Álbum • " + artist}
+            Álbum • {artist}
           </span>
         </div>
       </Link>

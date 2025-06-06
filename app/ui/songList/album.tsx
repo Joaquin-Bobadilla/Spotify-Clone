@@ -1,25 +1,24 @@
 "use client";
 
 import { useState } from "react";
-import { cn } from "../../lib/utils";
-import { songStore } from "../../store";
+import { cn, secondsToText } from "@/lib/utils";
+import { useSongStore } from "@/app/store";
+import { SongRow } from "./songRow";
+import type { TAlbum, TSong } from "@/lib/placeholder-data";
 
-export function AlbumControls(props) {
+export function AlbumControls(props: { album: TAlbum }) {
   const [isLiked, setLiked] = useState(props.album.isLiked);
   const [isShuffle, setShuffle] = useState(false);
-  const isPlaying = songStore((state) => state.isPlaying);
-  const currentSong = songStore((state) => state.currentSong);
-  const setPlaying = songStore((state) => state.setPlaying);
-  const setCurrentSong = songStore((state) => state.setCurrentSong);
+  const { currentSong, isPlaying, setIsPlaying, setCurrentSong } =
+    useSongStore();
 
   return (
     <div className="w-full flex gap-5 mb-5 items-center">
       {/*play button*/}
-
       {currentSong && currentSong.album === props.album.id && isPlaying ? (
         <button
           className="cursor-pointer hover:scale-103 hover:brightness-110 size-[56px] bg-spotify-green rounded-full flex items-center justify-center"
-          onClick={() => setPlaying(false)}
+          onClick={() => setIsPlaying(false)}
         >
           <svg
             className="size-[20px] fill-black"
@@ -36,7 +35,7 @@ export function AlbumControls(props) {
             if (!currentSong || currentSong.album !== props.album.id) {
               setCurrentSong(props.album.songList[0]);
             }
-            setPlaying(true);
+            setIsPlaying(true);
           }}
         >
           <svg
@@ -131,5 +130,72 @@ export function AlbumControls(props) {
         </svg>
       </button>
     </div>
+  );
+}
+
+export function AlbumHeader(props: { album: TAlbum }) {
+  return (
+    <header
+      className="flex flex-row gap-6 @container p-6"
+      style={{
+        backgroundImage: `linear-gradient(to bottom, ${props.album.colorFrom}, ${props.album.colorTo})`,
+      }}
+    >
+      <img
+        className="min-h-39 h-1/4 max-h-58 min-w-39 w-1/4 max-w-58 aspect-square rounded-md drop-shadow-neutral-950/30 drop-shadow-2xl"
+        src={props.album.image}
+      />
+
+      <div className="flex flex-col justify-end text-white">
+        <span>Álbum</span>
+        <h1 className="font-extrabold text-3xl @5xl:text-7xl mb-3">
+          {props.album.name}
+        </h1>
+        <span className="text-white/80">
+          <a
+            className="font-bold text-white hover:cursor-pointer hover:underline"
+            href=""
+          >
+            {props.album.artist}
+          </a>
+          {` • ${props.album.year} • ${
+            props.album.songList.length
+          } canciones, ${secondsToText(props.album.duration)}`}
+        </span>
+      </div>
+    </header>
+  );
+}
+
+export function AlbumTable(props: { songList: TSong[] }) {
+  return (
+    <table className="w-full">
+      <thead>
+        <tr className="text-spotify-gray border-b-spotify-gray/25 border-b-1 h-10 cursor-default">
+          <th className="min-w-14 font-normal text-[1.1em]">#</th>
+          <th className="text-left font-normal sm:resize-x overflow-hidden">
+            Título
+          </th>
+          <th className="text-left font-normal hidden sm:table-cell px-3">
+            Reproducciones
+          </th>
+          <th className="min-w-45">
+            <svg
+              className="ml-auto mr-12 fill-spotify-gray size-[1.5em]"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 -960 960 960"
+            >
+              <path d="m620.12-320.15 34.73-34.73-150.47-150.65v-212.05h-47.96v232.93l163.7 164.5ZM480.09-124.08q-73.53 0-138.25-27.82-64.73-27.83-113.47-76.6-48.73-48.77-76.51-113.51-27.78-64.74-27.78-138.36 0-73.69 27.82-138.6 27.83-64.92 76.6-113.16 48.77-48.23 113.51-76.01 64.74-27.78 138.36-27.78 73.69 0 138.61 28.06 64.92 28.07 112.94 76.18 48.03 48.11 76.01 112.97 27.99 64.87 27.99 138.62 0 73.53-27.82 138.25-27.83 64.73-76.1 113.47-48.27 48.73-113.18 76.51-64.92 27.78-138.73 27.78ZM480-480Zm.48 307.96q127.55 0 217.52-90.44 89.96-90.44 89.96-218 0-127.55-89.96-217.52-89.97-89.96-217.52-89.96-127.56 0-218 89.96-90.44 89.97-90.44 217.52 0 127.56 90.44 218t218 90.44Z" />
+            </svg>
+          </th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {props.songList.map((song, index) => {
+          return <SongRow key={song.id} song={song} ord={index + 1} />;
+        })}
+      </tbody>
+    </table>
   );
 }

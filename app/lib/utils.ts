@@ -1,6 +1,7 @@
-export const cn = (...classes) => classes.filter(Boolean).join(" ");
+export const cn = (...classes: (string | boolean | null | undefined)[]) =>
+  classes.filter(Boolean).join(" ");
 
-export const secondsToText = (seconds) => {
+export const secondsToText = (seconds: number) => {
   let hours = 0;
   let minutes = 0;
 
@@ -20,6 +21,6 @@ export const secondsToText = (seconds) => {
     : `${minutes} min`;
 };
 
-export const secondsToMinutes = (secods) => {
+export const secondsToMinutes = (secods: number) => {
   return `${Math.floor(secods / 60)}:${String(secods % 60).padStart(2, "0")}`;
 };

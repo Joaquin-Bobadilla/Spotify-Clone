@@ -1,19 +1,17 @@
 "use client";
 
-import { songStore } from "@/app/store";
+import { useSongStore } from "@/app/store";
 import { secondsToMinutes } from "@/app/lib/utils";
 
 export function PlayerControls() {
-  const currentSong = songStore((state) => state.currentSong);
-  const isPLaying = songStore((state) => state.isPlaying);
-  const togglePlaying = songStore((state) => state.togglePlaying);
+  const { currentSong, isPlaying, togglePlaying } = useSongStore();
 
   return (
     <div className="flex items-center justify-between h-full gap-6">
-      {/* CURRENT SONG INFO */}
+      {/* Current Song Info */}
       <div className="flex gap-4 items-center h-full w-78">
         {currentSong && (
-          <div className="flex gap-4 items-center h-full">
+          <>
             <img
               className="h-full aspect-square rounded-sm"
               src={currentSong.image}
@@ -50,11 +48,11 @@ export function PlayerControls() {
                 <path d="M11.75 8a.75.75 0 0 1-.75.75H8.75V11a.75.75 0 0 1-1.5 0V8.75H5a.75.75 0 0 1 0-1.5h2.25V5a.75.75 0 0 1 1.5 0v2.25H11a.75.75 0 0 1 .75.75z"></path>
               </svg>
             </button>
-          </div>
+          </>
         )}
       </div>
 
-      {/* PLAYBACK CONTROLS */}
+      {/* Playback Controls */}
       <div className="flex flex-col min-w-70 justify-between items-center w-3/8 h-full">
         <div className="flex gap-6 items-center">
           {/* Shuffle */}
@@ -75,7 +73,7 @@ export function PlayerControls() {
             onClick={() => togglePlaying()}
             className="size-8 rounded-full bg-white flex items-center mx-1 spotify-btn"
           >
-            {isPLaying ? (
+            {isPlaying ? (
               // Pause
               <svg
                 className="size-4 fill-black m-auto"
@@ -119,7 +117,7 @@ export function PlayerControls() {
         </div>
       </div>
 
-      {/* MORE OPTIONS */}
+      {/* More Options */}
       <div className="flex flex-row gap-4 w-78">
         {/* View */}
         <button className="size-4 fill-spotify-gray spotify-btn">
