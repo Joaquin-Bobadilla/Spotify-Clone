@@ -31,3 +31,9 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
+
+::-webkit-scrollbar-corner {
+  background: none;
+  border: none;
+  outline: none;
+}
