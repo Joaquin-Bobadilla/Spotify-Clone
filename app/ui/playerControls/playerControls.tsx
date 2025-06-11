@@ -2,6 +2,7 @@
 
 import { useSongStore } from "@/app/store";
 import { secondsToMinutes } from "@/app/lib/utils";
+import { PlayIcon, PauseIcon } from "lucide-react";
 
 export function PlayerControls() {
   const { currentSong, isPlaying, togglePlaying } = useSongStore();
@@ -74,23 +75,9 @@ export function PlayerControls() {
             className="size-8 rounded-full bg-white flex items-center mx-1 spotify-btn"
           >
             {isPlaying ? (
-              // Pause
-              <svg
-                className="size-4 fill-black m-auto"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 16 16"
-              >
-                <path d="M2.7 1a.7.7 0 0 0-.7.7v12.6a.7.7 0 0 0 .7.7h2.6a.7.7 0 0 0 .7-.7V1.7a.7.7 0 0 0-.7-.7H2.7zm8 0a.7.7 0 0 0-.7.7v12.6a.7.7 0 0 0 .7.7h2.6a.7.7 0 0 0 .7-.7V1.7a.7.7 0 0 0-.7-.7h-2.6z"></path>
-              </svg>
+              <PauseIcon className="size-5 fill-black m-auto stroke-1" />
             ) : (
-              // Play
-              <svg
-                className="size-5 fill-black m-auto"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-              >
-                <path d="m7.05 3.606 13.49 7.788a.7.7 0 0 1 0 1.212L7.05 20.394A.7.7 0 0 1 6 19.788V4.212a.7.7 0 0 1 1.05-.606z"></path>
-              </svg>
+              <PlayIcon className="size-5 fill-black m-auto stroke-0" />
             )}
           </button>
           {/* Next Song */}

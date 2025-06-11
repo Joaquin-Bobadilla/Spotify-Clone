@@ -4,9 +4,10 @@ import { useState } from "react";
 import { secondsToMinutes, cn } from "@/lib/utils";
 import { useSongStore } from "@/app/store";
 import type { TSong } from "@/lib/placeholder-data";
+import { PlayIcon, PauseIcon } from "lucide-react";
 
-export function SongRow(props: { song: TSong; ord: number }) {
-  const [isLiked, setLiked] = useState(props.song.isLiked);
+export function SongRow({ song, ord }: { song: TSong; ord: number }) {
+  const [isLiked, setLiked] = useState(song.isLiked);
   const { currentSong, isPlaying, setIsPlaying, setCurrentSong } =
     useSongStore();
 
@@ -17,66 +18,49 @@ export function SongRow(props: { song: TSong; ord: number }) {
     >
       {/*id, play button cell*/}
       <td className="w-12 text-center text-spotify-gray rounded-s-sm">
-        {currentSong && props.song.id === currentSong.id && isPlaying ? (
-          /*pause button*/
+        {currentSong && song.id === currentSong.id && isPlaying ? (
           <button
             className="m-auto hidden group-hover:block group-focus:block"
             onClick={() => {
               setIsPlaying(false);
             }}
           >
-            <svg
-              className="size-4 fill-white"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-            >
-              <path
-                d="M5.7 3a.7.7 0 0 0-.7.7v16.6a.7.7 0 0 0 .7.7h2.6a.7.7 0 0 0 .7-.7V3.7a.7.7 0 0 0-.7-.7H5.7zm10 0a.7.7 0 0 0-.7.7v16.6a.7.7 0 0 0 .7.7h2.6a.7.7 0 0 0 .7-.7V3.7a.7.7 0 0 0-.7-.7h-2.6z"
-                fill="#FFFFFF"
-              ></path>
-            </svg>
+            <PauseIcon className="size-5 fill-white m-auto stroke-0" />
           </button>
         ) : (
-          /*play button*/
           <button
             className="m-auto hidden group-hover:block group-focus:block"
             onClick={() => {
-              setCurrentSong(props.song);
+              setCurrentSong(song);
               setIsPlaying(true);
             }}
           >
-            <svg
-              className="size-6 fill-white"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 -960 960 960"
-            >
-              <path d="M356-252.16v-455.68L707.07-480 356-252.16Z" />
-            </svg>
+            <PlayIcon className="size-4 fill-white m-auto stroke-0" />
           </button>
         )}
         {/*sound wave icon*/}
         <img
           className={cn(
-            "group-hover:hidden group-focus:hidden m-auto size-3",
-            currentSong && props.song.id === currentSong.id && isPlaying
+            currentSong && song.id === currentSong.id && isPlaying
               ? "block"
-              : "hidden"
+              : "hidden",
+            "group-hover:hidden group-focus:hidden m-auto size-3"
           )}
           src="https://open.spotifycdn.com/cdn/images/equaliser-animated-green.f5eb96f2.gif"
         />
         {/*song id*/}
         <span
           className={cn(
-            "group-hover:hidden group-focus:hidden",
-            currentSong && props.song.id === currentSong.id && isPlaying
+            currentSong && song.id === currentSong.id && isPlaying
               ? "hidden"
               : "block",
-            currentSong && props.song.id === currentSong.id && !isPlaying
+            currentSong && song.id === currentSong.id && !isPlaying
               ? "text-spotify-green"
-              : "text-spotify-gray"
+              : "text-spotify-gray",
+            "group-hover:hidden group-focus:hidden"
           )}
         >
-          {props.ord}
+          {ord}
         </span>
       </td>
       {/*title, artists cell*/}
@@ -84,17 +68,17 @@ export function SongRow(props: { song: TSong; ord: number }) {
         <div className="flex flex-col gap-0">
           <span
             className={cn(
-              "leading-5 cursor-default font-medium break-all line-clamp-1",
-              currentSong && props.song.id === currentSong.id
+              currentSong && song.id === currentSong.id
                 ? "text-spotify-green"
-                : "text-white"
+                : "text-white",
+              "leading-5 cursor-default font-medium break-all line-clamp-1"
             )}
           >
-            {props.song.title}
+            {song.title}
           </span>
           <span className="leading-5 text-sm text-spotify-gray group-hover:text-white group-focus:text-white break-all line-clamp-1">
-            {props.song.artists.map((artist, index) => {
-              const isLast = index !== props.song.artists.length - 1;
+            {song.artists.map((artist, index) => {
+              const isLast = index !== song.artists.length - 1;
               return (
                 <span key={index}>
                   <a className="hover:underline" href="">
@@ -110,7 +94,7 @@ export function SongRow(props: { song: TSong; ord: number }) {
       {/*streams cell*/}
       <td className="px-3 align-middle hidden sm:table-cell cursor-default text-spotify-gray group-hover:text-white group-focus:text-white">
         <span className="block text-right w-[13ch]">
-          {props.song.streams.toLocaleString("es-AR")}
+          {song.streams.toLocaleString("es-AR")}
         </span>
       </td>
       {/*like, duration, options cell*/}
@@ -147,7 +131,7 @@ export function SongRow(props: { song: TSong; ord: number }) {
             </button>
           )}
           <span className="text-spotify-gray cursor-default w-10 text-right">
-            {secondsToMinutes(props.song.duration)}
+            {secondsToMinutes(song.duration)}
           </span>
           {/*options button*/}
           <button className="text-white cursor-pointer invisible group-hover:visible group-focus:visible">

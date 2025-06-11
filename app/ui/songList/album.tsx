@@ -5,46 +5,34 @@ import { cn, secondsToText } from "@/lib/utils";
 import { useSongStore } from "@/app/store";
 import { SongRow } from "./songRow";
 import type { TAlbum, TSong } from "@/lib/placeholder-data";
+import { PlayIcon, PauseIcon } from "lucide-react";
 
-export function AlbumControls(props: { album: TAlbum }) {
-  const [isLiked, setLiked] = useState(props.album.isLiked);
+export function AlbumControls({ album }: { album: TAlbum }) {
+  const [isLiked, setLiked] = useState(album.isLiked);
   const [isShuffle, setShuffle] = useState(false);
   const { currentSong, isPlaying, setIsPlaying, setCurrentSong } =
     useSongStore();
 
   return (
     <div className="w-full flex gap-5 mb-5 items-center">
-      {/*play button*/}
-      {currentSong && currentSong.album === props.album.id && isPlaying ? (
+      {currentSong && currentSong.album === album.id && isPlaying ? (
         <button
           className="cursor-pointer hover:scale-103 hover:brightness-110 size-[56px] bg-spotify-green rounded-full flex items-center justify-center"
           onClick={() => setIsPlaying(false)}
         >
-          <svg
-            className="size-[20px] fill-black"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 16 16"
-          >
-            <path d="M2.7 1a.7.7 0 0 0-.7.7v12.6a.7.7 0 0 0 .7.7h2.6a.7.7 0 0 0 .7-.7V1.7a.7.7 0 0 0-.7-.7H2.7zm8 0a.7.7 0 0 0-.7.7v12.6a.7.7 0 0 0 .7.7h2.6a.7.7 0 0 0 .7-.7V1.7a.7.7 0 0 0-.7-.7h-2.6z"></path>
-          </svg>
+          <PauseIcon className="size-7 fill-black m-auto stroke-0" />
         </button>
       ) : (
         <button
           className="cursor-pointer hover:scale-103 hover:brightness-110 size-[56px] bg-spotify-green rounded-full flex items-center justify-center"
           onClick={() => {
-            if (!currentSong || currentSong.album !== props.album.id) {
-              setCurrentSong(props.album.songList[0]);
+            if (!currentSong || currentSong.album !== album.id) {
+              setCurrentSong(album.songList[0]);
             }
             setIsPlaying(true);
           }}
         >
-          <svg
-            className="size-[20px] fill-black"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 16 16"
-          >
-            <path d="M3 1.713a.7.7 0 0 1 1.05-.607l10.89 6.288a.7.7 0 0 1 0 1.212L4.05 14.894A.7.7 0 0 1 3 14.288V1.713z"></path>
-          </svg>
+          <PlayIcon className="size-6 fill-black m-auto stroke-0" />
         </button>
       )}
 
@@ -55,8 +43,8 @@ export function AlbumControls(props: { album: TAlbum }) {
       >
         <svg
           className={cn(
-            "size-[32px]",
-            isShuffle ? "fill-spotify-green" : "fill-spotify-gray"
+            isShuffle ? "fill-spotify-green" : "fill-spotify-gray",
+            "size-[32px]"
           )}
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 16 16"
@@ -133,41 +121,41 @@ export function AlbumControls(props: { album: TAlbum }) {
   );
 }
 
-export function AlbumHeader(props: { album: TAlbum }) {
+export function AlbumHeader({ album }: { album: TAlbum }) {
   return (
     <header
       className="flex flex-row gap-6 @container p-6"
       style={{
-        backgroundImage: `linear-gradient(to bottom, ${props.album.colorFrom}, ${props.album.colorTo})`,
+        backgroundImage: `linear-gradient(to bottom, ${album.colorFrom}, ${album.colorTo})`,
       }}
     >
       <img
         className="min-h-39 h-1/4 max-h-58 min-w-39 w-1/4 max-w-58 aspect-square rounded-md drop-shadow-neutral-950/30 drop-shadow-2xl"
-        src={props.album.image}
+        src={album.image}
       />
 
       <div className="flex flex-col justify-end text-white">
         <span>Álbum</span>
         <h1 className="font-extrabold text-3xl @5xl:text-7xl mb-3">
-          {props.album.name}
+          {album.name}
         </h1>
         <span className="text-white/80">
           <a
             className="font-bold text-white hover:cursor-pointer hover:underline"
             href=""
           >
-            {props.album.artist}
+            {album.artist}
           </a>
-          {` • ${props.album.year} • ${
-            props.album.songList.length
-          } canciones, ${secondsToText(props.album.duration)}`}
+          {` • ${album.year} • ${
+            album.songList.length
+          } canciones, ${secondsToText(album.duration)}`}
         </span>
       </div>
     </header>
   );
 }
 
-export function AlbumTable(props: { songList: TSong[] }) {
+export function AlbumTable({ songList }: { songList: TSong[] }) {
   return (
     <table className="w-full">
       <thead>
@@ -192,7 +180,7 @@ export function AlbumTable(props: { songList: TSong[] }) {
       </thead>
 
       <tbody>
-        {props.songList.map((song, index) => {
+        {songList.map((song, index) => {
           return <SongRow key={song.id} song={song} ord={index + 1} />;
         })}
       </tbody>
